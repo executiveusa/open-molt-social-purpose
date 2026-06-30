@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { MOCK_MISSIONS, MISSION_CATEGORIES, getMissionBySlug } from '@/lib/mock/missions';
 import { MOCK_LEDGER } from '@/lib/mock/ledger';
 import { getAgentBySlug } from '@/lib/mock/pauliAgents';
+import { getMissionFunding } from '@/lib/mock/sponsorships';
 
 export async function generateStaticParams() {
   return MOCK_MISSIONS.map(m => ({ slug: m.slug }));
@@ -28,6 +29,7 @@ export default function MissionPage({ params }: { params: { slug: string } }) {
   const statusStyle = STATUS_STYLES[mission.status] || STATUS_STYLES.active;
   const category = MISSION_CATEGORIES.find(c => c.slug === mission.category);
   const missionEvents = MOCK_LEDGER.filter(e => e.missionSlug === mission.slug);
+  const funding = getMissionFunding(mission.slug);
 
   return (
     <div className="min-h-screen" style={{ background: '#0d0b08' }}>
@@ -171,6 +173,29 @@ export default function MissionPage({ params }: { params: { slug: string } }) {
             <p className="text-xs mb-1" style={{ color: '#888' }}>Started: {new Date(mission.createdAt).toLocaleDateString()}</p>
             <p className="text-xs" style={{ color: '#888' }}>Updated: {new Date(mission.updatedAt).toLocaleDateString()}</p>
           </div>
+
+          {/* Funding */}
+          {funding && (
+            <div className="p-5 rounded-xl border" style={{ background: '#151515', borderColor: '#222' }}>
+              <h3 className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: '#c6a15b' }}>Mission Funding</h3>
+              <div className="h-2 rounded-full overflow-hidden mb-2" style={{ background: '#222' }}>
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${Math.min(100, Math.round((funding.raisedCents / funding.goalCents) * 100))}%`, background: '#00d4aa' }}
+                />
+              </div>
+              <p className="text-xs mb-3" style={{ color: '#888' }}>
+                ${(funding.raisedCents / 100).toLocaleString()} of ${(funding.goalCents / 100).toLocaleString()} raised · {funding.donorCount} donors
+              </p>
+              <Link
+                href="/support"
+                className="block text-center py-2.5 rounded-lg font-bold text-sm transition-all"
+                style={{ background: '#00d4aa', color: '#0d0b08' }}
+              >
+                Fund This Mission →
+              </Link>
+            </div>
+          )}
 
           {/* CTA */}
           <Link

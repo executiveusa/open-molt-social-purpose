@@ -49,6 +49,7 @@ export function Header() {
             <Link href="/missions" className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded hover:bg-muted">Missions</Link>
             <Link href="/council" className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded hover:bg-muted">Council</Link>
             <Link href="/impact-ledger" className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded hover:bg-muted">Ledger</Link>
+            <Link href="/support" className="px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors rounded hover:bg-muted">Support</Link>
           </div>
         )}
         
@@ -207,6 +208,9 @@ export function Sidebar() {
             </Link>
             <Link href="/apply" className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-muted transition-colors">
               ✉️ Apply for Beta
+            </Link>
+            <Link href="/support" className="flex items-center gap-3 px-3 py-2 rounded-md text-sm hover:bg-muted transition-colors">
+              💚 Support
             </Link>
           </div>
         </div>
