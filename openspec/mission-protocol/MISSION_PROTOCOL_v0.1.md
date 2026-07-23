@@ -614,5 +614,40 @@ SLICE 5 — First paid mission
 
 ---
 
+---
+
+## 16. Red-Team Round 2 — TRACK B Findings (SOL-56 agent, 2026-07-23)
+
+**Verdict: 1 PROTECTED, 8 PARTIAL, 1 UNPROTECTED**  
+**Status: Documented — implementation gated; commercial outreach not gated**
+
+| ID | Vector | Verdict | Gap | Fix (section to amend) |
+|----|--------|---------|-----|------------------------|
+| V.01 | False outcome claims | PARTIAL | Who may write VERIFIED status is undefined; verifier ≠ submitting agent not required | §3: define permitted verifier roles; require verifier ≠ submitting agent |
+| V.02 | Fake economic attribution | PARTIAL | methodDetail is agent-authored prose with no independent review; 'other' flag has no handler or SLA | §7: any 'other' or non-directly-measurable methodType must route to named human reviewer before Mission advances past CLAIMED |
+| V.03 | Approval bypass | PARTIAL | Action-type classification (the input that triggers system computation) is not specified as system-derived; agent-supplied text could misclassify | §8: action-type classification must derive from structured fields, never agent-supplied text; ambiguous cases default to approvalRequired = true |
+| V.04 | Privacy leakage | PARTIAL | Observatory projection is application-layer filtered, not query-layer enforced; a bug bypasses privacy entirely | §9: projection must be generated from a data-layer view that structurally excludes privacyFlags content, not filtered post-retrieval |
+| V.05 | Mission scope drift | PARTIAL | Scope is pinned at AUTHORIZED but not enforced per-action; no individual action ↔ scope clause comparison | §6 or §8: each action must declare the scope clause it satisfies; actions with no matching clause are blocked pending human review |
+| V.06 | Self-attestation | PARTIAL | "Client" is undefined as a human identity; service accounts and API keys satisfy the schema | §6 (signedBy): attestation must be performed by a verified human identity; service accounts and API keys are disqualified signers |
+| V.07 | Silent record mutation | PARTIAL | Append-only is a platform rule, not cryptographically verifiable externally; platform itself could rewrite history | §11: each append event must produce a hash chained to the prior event or be anchored to an external immutable log |
+| **V.08** | **Conflicts of interest** | **UNPROTECTED** | **Yappyverse earns revenue on Mission success, Yappyverse agents submit evidence, Yappyverse controls verification infrastructure — no separation or disclosure requirement exists** | **Add §8a (Platform Conflict Rule): value claims above a defined threshold where platform revenue is contingent on success must be verified by credentialed third party; conflict disclosed in Observatory projection (§9) for all such Missions** |
+| V.09 | Reputation gaming | PARTIAL | No mission difficulty dimension; easy-mission attestations count equally with complex ones | §13: add scope-complexity score derived from §6 fields as a multiplier so easy-mission attestations contribute proportionally less |
+| V.10 | Rollback failure | PARTIAL | Agent Council is the resolution authority but undefined (no composition, quorum, independence rules, appeal path); captured Council is the one path around rollback protection | §11: define or externally cite Agent Council composition, independence requirements, quorum rules for invalidation, and appeal path — block Slice 2 (first Bead) until governance is specified |
+
+### Priority Order for Slice 2 Pre-Work
+
+Before generating the first Bead, these must be resolved (in order):
+
+1. **V.08** — Conflict of interest: add §8a Platform Conflict Rule (UNPROTECTED — highest risk)
+2. **V.07** — Storage integrity: cryptographic chaining or external anchor for append events
+3. **V.01** — Verifier identity: verifier ≠ submitting agent, permitted role list
+4. **V.03** — Classification source: action-type from structured fields only
+5. **V.10** — Agent Council governance: defined before first Bead issues
+6. V.02, V.04, V.05, V.06, V.09 — address in Slice 2 spec pass before production
+
+V.04 (privacy leakage) and V.05 (scope enforcement) are implementation-layer concerns that surface in Slice 3 (Observatory) and Slice 1 (action logging) respectively — they do not block the spec but must be flagged in those implementation docs.
+
+---
+
 *This document supersedes all prior informal Mission descriptions.*  
 *Version history tracked in beads/manifest.json when first Bead is written.*
