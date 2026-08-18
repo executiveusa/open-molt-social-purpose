@@ -109,9 +109,23 @@ A DISPUTED mission record is permanently DISPUTED in history. A new Mission may 
 | VERIFIED | System or independent party confirms evidence for *that same claim* is authentic and matches it | Evidence items hash-validated; source corroborated independently of the agent |
 | ATTESTED | Authorized client representative confirms *that same claim* meets agreed successCriteria | Signed attestation with timestamp and named attestor, per `VerifiedHumanDecision` (§9a) |
 
-**Within one claim, these are cumulative:** a claim that is ATTESTED was necessarily VERIFIED and originally CLAIMED — for that claim. **Across claims, nothing is implied.** A DELIVERY-layer claim reaching ATTESTED proves nothing about whether the VALUE-layer claim (§4) has been CLAIMED, let alone VERIFIED or ATTESTED. Grant Scout's Slice 0 trace (§17.2) is the canonical example: `MISSION_ATTESTED` attests the DELIVERY/OUTCOME-layer claim ("the brief was delivered and accepted") — it says nothing about the VALUE-layer claim ("a grant was awarded"), which requires its own separate, later, independently-evidenced chain (`VALUE_OBSERVED → VALUE_VERIFIED`, per §17.2).
+**Corrected again 2026-08-18 — second canonical review pass, ATTACK WINS.** The previous version of this paragraph stated that within one claim, ATTESTED necessarily implies VERIFIED. That is still stronger than the frozen doctrine. VERIFIED and ATTESTED are **independent** proof dimensions for a given claim — neither implies the other. A client can attest to a claim ("I received and accept this brief") that no independent verifier ever checked. An independent verifier can verify a claim no client ever attests to. A specific mission's workflow may *require* an ordering — Slice 0 requires VERIFIED before ATTESTED (§17.2) — but that is a policy/ordering constraint imposed by that mission, not a semantic entailment of the ATTESTED dimension itself.
 
-Implementations must not infer a general rule "ATTESTED ⇒ prior chain layers satisfied" or treat ATTESTATION as a step that follows VALUE. Every proof-dimension record must name the specific claim and layer it applies to.
+```
+DELIVERY claim            DELIVERY claim (valid, policy-permitting)
+  claimed:   yes            claimed:   yes
+  verified:  yes            verified:  no
+  attested:  yes            attested:  yes
+
+VALUE claim
+  claimed:   no
+  verified:  no
+  attested:  no
+```
+
+**One floor, not a workflow policy:** VERIFIED and ATTESTED both presuppose CLAIMED for the same claim — a dimension cannot exist for a claim that was never asserted in the first place. That is definitional (you cannot verify or attest a claim that does not exist), not a maturity ladder, and it does not reintroduce any implication between VERIFIED and ATTESTED themselves. **Across claims, nothing is implied at all**, including this floor: a DELIVERY-layer claim reaching ATTESTED proves nothing about whether the VALUE-layer claim (§4) has been CLAIMED, VERIFIED, or ATTESTED. Grant Scout's Slice 0 trace (§17.2) is the canonical example: `MISSION_ATTESTED` attests the DELIVERY/OUTCOME-layer claim — it says nothing about the VALUE-layer claim, which requires its own separate, later, independently-evidenced chain (`VALUE_OBSERVED → VALUE_VERIFIED`, per §17.2).
+
+Implementations must not infer a general rule "ATTESTED ⇒ VERIFIED," "ATTESTED ⇒ prior chain layers satisfied," or treat ATTESTATION as a step that follows VALUE. Every proof-dimension record must name the specific claim and layer it applies to, and mission-specific ordering requirements (like Slice 0's) must be encoded as policy, not read as an intrinsic property of the dimension.
 
 **Reputation weighting:**
 - 1,000 missions with only a CLAIMED proof dimension on their strongest claim weigh less than 10 missions with an ATTESTED proof dimension on their strongest claim, in the reputation graph
