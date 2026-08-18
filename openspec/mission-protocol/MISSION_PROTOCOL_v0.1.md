@@ -1,8 +1,8 @@
 # MISSION_PROTOCOL_v0.1
 
-**Status**: RECONSTRUCTION IN PROGRESS — see §0 Records-Integrity Ledger below  
+**Status**: CANONICAL (Truth / Governance / Security + Public Proof) — see §0 Records-Integrity Ledger below  
 **Authors**: PAULI-PRIME (builder) + SOL-56 (strategy) + GPT-5.6 Sol (co-architect/critic)  
-**Date**: 2026-07-23 | Red-team round 1: 2026-07-23 | Round 2 (V.01–V.10): 2026-07-23 | Slice 0 / Public Proof Gauntlet: 2026-08-17 | Reconstruction: 2026-08-17  
+**Date**: 2026-07-23 | Red-team round 1: 2026-07-23 | Round 2 (V.01–V.10): 2026-07-23 | Slice 0 / Public Proof Gauntlet: 2026-08-17 | Reconstruction: 2026-08-17 | Canonical fidelity review closed: 2026-08-18  
 **Scope**: THE PAULI EFFECT — Open-Molt platform + Pauli's Place
 
 ---
@@ -19,13 +19,15 @@ This document was found on 2026-08-17 to be stuck at its original PR #2 draft st
 
 | Surface | Design status | Repository status |
 |---|---|---|
-| Truth (Output→Value chain, evidence layering) | AGREED | DRAFTED (this reconstruction) — pending commit, critic verification, merge, re-fetch |
-| Governance (approval computation, identity binding, VerifiedHumanDecision) | AGREED | DRAFTED — pending same |
-| Security + Public Proof (six-gate pipeline, ApprovedClaim, Distribution Copy Governance) | AGREED | DRAFTED — pending same |
-| Utility + Observability | OPEN / PAUSED | Not started — paused pending this reconstruction |
+| Truth (Output→Value chain, evidence layering) | AGREED | **CANONICAL** — merged, independently re-read from `main` and passed by fresh critic (GPT-5.6 Sol) 2026-08-18 |
+| Governance (approval computation, identity binding, VerifiedHumanDecision) | AGREED | **CANONICAL** — same review, same date |
+| Security + Public Proof (six-gate pipeline, ApprovedClaim, Distribution Copy Governance) | AGREED | **CANONICAL** — same review, same date |
+| Utility + Observability | OPEN — resumes now that Truth/Governance/Security are canonical | Not started; benchmark methodology agreed (AgentMomo-grounded control, real participant data required, no simulated verdicts) |
 | Money (Pilot #1 sold) | OPEN | Offer and prospect list drafted; outreach not yet sent (verified against connected Gmail 2026-08-17) |
 
-Do not advance this table past `DRAFTED` without completing steps 5–10 below.
+**How this table reached CANONICAL, for the record:** §3's proof-dimension doctrine took three separate correction rounds after the initial reconstruction (PRs #7, #8, #9) before an independent fresh-critic re-read of the live `main` file confirmed no remaining fidelity gap. That is the process working as designed, not a sign the process failed — each round found a real, narrowing defect (universal ATTESTED⇒VALUE ladder → cross-dimension implication → CLAIMED-as-floor), and none of the three rounds was accepted as canonical on the builder's own say-so. The repo-boundary split adopted 2026-08-18: this repository (`open-molt-social-purpose`) owns the public-proof/governance side; `PAULIS-PLACE` (owned by GPT-5.6 Sol's collaborating session) owns the private game-world/OKF/Mission-Control-integration side. This session has confirmed read-only access to `PAULIS-PLACE` and no write/branch/PR access from its current environment — critic-only there, by environment constraint as well as by design.
+
+Do not advance a surface past `DRAFTED` without completing steps 5–10 below. Do not regress a `CANONICAL` surface without new evidence and a fresh critic pass — the same discipline that earned the status is required to reopen it.
 
 **Verification steps required before any status in the table above may move to `MERGED`/`CANONICAL`:**
 
