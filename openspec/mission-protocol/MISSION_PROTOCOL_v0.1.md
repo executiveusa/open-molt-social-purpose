@@ -97,24 +97,33 @@ A DISPUTED mission record is permanently DISPUTED in history. A new Mission may 
 
 ---
 
-## 3. Outcome States (three, cumulative)
+## 3. Proof Dimensions (CLAIMED / VERIFIED / ATTESTED)
 
-| State | Definition | Required evidence |
+**Corrected 2026-08-18 — Gauntlet canonical review, ATTACK WINS, single largest fidelity gap.** The original framing below described these as a universal maturity ladder terminating above VALUE. That contradicts §17.2, frozen earlier: `MISSION_ATTESTED` must not imply grant submission, award, or financial value — attestation of a claim does not imply verification or attestation of any higher-layer claim, and VALUE is a separate, later, independently-proven chain. The correction:
+
+**CLAIMED, VERIFIED, and ATTESTED are proof dimensions that attach to one specific claim at one specific evidence-maturity layer (§4) — they are not a universal ladder that spans layers, and they do not by themselves reach VALUE.**
+
+| Proof dimension | Definition | Required evidence |
 |-------|-----------|-------------------|
-| CLAIMED | Agent asserts outcome occurred | At least one EvidenceItem with non-empty contentHash |
-| VERIFIED | System or independent party confirms evidence is authentic and matches claim | Evidence items hash-validated; source corroborated independently of the agent |
-| ATTESTED | Authorized client representative confirms outcome meets agreed successCriteria | Signed attestation with timestamp and named attestor |
+| CLAIMED | Agent asserts a specific claim, at a specific layer, occurred | At least one EvidenceItem with non-empty contentHash |
+| VERIFIED | System or independent party confirms evidence for *that same claim* is authentic and matches it | Evidence items hash-validated; source corroborated independently of the agent |
+| ATTESTED | Authorized client representative confirms *that same claim* meets agreed successCriteria | Signed attestation with timestamp and named attestor, per `VerifiedHumanDecision` (§9a) |
 
-**These are cumulative, not interchangeable.** ATTESTED implies VERIFIED implies CLAIMED.
+**Within one claim, these are cumulative:** a claim that is ATTESTED was necessarily VERIFIED and originally CLAIMED — for that claim. **Across claims, nothing is implied.** A DELIVERY-layer claim reaching ATTESTED proves nothing about whether the VALUE-layer claim (§4) has been CLAIMED, let alone VERIFIED or ATTESTED. Grant Scout's Slice 0 trace (§17.2) is the canonical example: `MISSION_ATTESTED` attests the DELIVERY/OUTCOME-layer claim ("the brief was delivered and accepted") — it says nothing about the VALUE-layer claim ("a grant was awarded"), which requires its own separate, later, independently-evidenced chain (`VALUE_OBSERVED → VALUE_VERIFIED`, per §17.2).
+
+Implementations must not infer a general rule "ATTESTED ⇒ prior chain layers satisfied" or treat ATTESTATION as a step that follows VALUE. Every proof-dimension record must name the specific claim and layer it applies to.
 
 **Reputation weighting:**
-- 1,000 CLAIMED missions < 10 ATTESTED missions in the reputation graph
-- VERIFIED_UNATTESTED missions receive partial weight
+- 1,000 missions with only a CLAIMED proof dimension on their strongest claim weigh less than 10 missions with an ATTESTED proof dimension on their strongest claim, in the reputation graph
+- Missions with a VERIFIED-but-not-ATTESTED strongest claim receive partial weight
 - UNVERIFIED and FAILED missions stay in the record with full visibility — failures are why wins are trusted
+- Reputation weighting reflects the strongest proof dimension reached on any claim, not an assumption that VALUE was proven
 
 ---
 
-## 4. Output → Value Chain
+## 4. Evidence Maturity Chain
+
+**Corrected 2026-08-18 alongside §3 — see that section's note.** This chain describes evidence maturity for the underlying work. It is a separate model from the proof dimensions in §3. ATTESTATION is **not** a layer in this chain — it does not sit "after" VALUE or any other layer. Any claim, at any layer below, may independently reach the CLAIMED / VERIFIED / ATTESTED proof dimensions from §3; reaching one says nothing about whether a *different, higher* layer's claim has reached any proof dimension at all.
 
 Every mission outcome must be traceable through this chain. **The system must not allow a jump from ACTION directly to VALUE CREATED.**
 
@@ -130,11 +139,9 @@ RESPONSE        → A target reacted (opened, replied, clicked, registered)
 OUTCOME         → A measurable state changed (leads qualified, registrations confirmed)
   ↓ methodology + evidence
 VALUE           → The outcome has defensible economic significance
-  ↓ external confirmation
-ATTESTATION     → An authorized party confirms value meets agreed success criteria
 ```
 
-Each layer may stop independently. A Mission that reaches DELIVERY but not RESPONSE is closed at DELIVERY — not promoted to VALUE CREATED.
+Each layer may stop independently. A Mission that reaches DELIVERY but not RESPONSE is closed at DELIVERY — not promoted to VALUE CREATED. A claim at any layer can separately carry its own CLAIMED / VERIFIED / ATTESTED proof-dimension state (§3); a DELIVERY-layer claim reaching ATTESTED does not promote the VALUE-layer claim to any proof dimension, and does not imply VALUE was even CLAIMED.
 
 **Layer-mislabeling is a named failure mode, not a hypothetical.** Gauntlet review of the Slice 0 canonical trace (§17) found `APPROVAL_GRANTED` mislabeled at the DELIVERY layer when it only proved authorization for future delivery, not that delivery occurred. The fix: an approval event proving *permission* sits at whatever layer it actually evidences (OUTPUT, typically); a distinct `ARTIFACT_DELIVERED` event, with its own independent evidence (provider receipt, tool-run receipt), is required to claim the DELIVERY layer. Never let a downstream event (e.g., attestation) retroactively imply an earlier layer was proven when no evidence was logged for it at the time.
 
